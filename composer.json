@@ -30,6 +30,7 @@
         "hyperf/model-cache": "~2.1.0",
         "hyperf/process": "~2.1.0",
         "hyperf/redis": "~2.1.0",
+        "hyperf/resource": "^2.1",
         "hyperf/tracer": "~2.1.0",
         "phper666/jwt-auth": "^3.0"
     },
