@@ -13,6 +13,7 @@
     "license": "Apache-2.0",
     "require": {
         "php": ">=7.3",
+        "getuilaboratory/getui-pushapi-php-client-v2": "dev-master",
         "hyperf/amqp": "~2.1.0",
         "hyperf/async-queue": "~2.1.0",
         "hyperf/cache": "~2.1.0",
@@ -33,6 +34,7 @@
         "hyperf/redis": "~2.1.0",
         "hyperf/resource": "^2.1",
         "hyperf/scout": "^2.1",
+        "hyperf/snowflake": "^2.1",
         "hyperf/tracer": "~2.1.0",
         "phper666/jwt-auth": "^3.0"
     },
