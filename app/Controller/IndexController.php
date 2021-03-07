@@ -20,7 +20,7 @@ class IndexController extends Controller
 
         return [
             'method' => $method,
-            'message' => "Hello {$user}.88",
+            'message' => "Hello {$user}.8877",
         ];
     }
 }
