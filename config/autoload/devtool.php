@@ -29,7 +29,7 @@ return [
             'namespace' => 'App\\Controller',
         ],
         'job' => [
-            'namespace' => 'App\\Job',
+            'namespace' => 'App\\Task',
         ],
         'listener' => [
             'namespace' => 'App\\Listener',
