@@ -39,7 +39,7 @@ class Controller
     public function success($data, $message = 'success')
     {
         $code = $this->response->getStatusCode();
-        return ['msg' => $message, 'code' => $code, 'data' => $data];
+        return ['msg' => $message, 'code' => $code, 'data' => $data,'time' => time()];
     }
     /**
      * 请求失败.
@@ -50,6 +50,6 @@ class Controller
      */
     public function failed($message = 'Request format error!')
     {
-        return ['msg' => $message, 'code' => 500, 'data' => ''];
+        return ['msg' => $message, 'code' => 500, 'data' => '','time' => time()];
     }
 }

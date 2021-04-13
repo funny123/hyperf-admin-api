@@ -25,13 +25,15 @@ class LoginController extends Controller
     {
 //         $hash = password_hash($this->request->input('password'), PASSWORD_DEFAULT);
 //         return $this->failed($hash);
-        $user = User::query()->where('account', $this->request->input('username'))->first();
+        $user = User::query()->where('phone', $this->request->input('username'))->first();
         //验证用户账户密码
         if  (!empty($user->password) && password_verify($this->request->input('password'), $user->password))  {
-            $userData = [
-                'uid'       => $user->uid,
-                'account'  => $user->account,
-            ];
+//            $userData = [
+//                'uid'       => $user->uid,
+//                'account'  => $user->account,
+//            ];
+            $userData = $user->toArray();
+            unset($userData['password']);
             $token = $this->jwt->getToken($userData);
             $data  = [
                 'token' => (string) $token,

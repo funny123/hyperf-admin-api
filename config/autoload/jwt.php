@@ -7,7 +7,7 @@ return [
     /**
      * 单点登录自定义数据中必须存在uid的键值，这个key你可以自行定义，只要自定义数据中存在该键即可
      */
-    'sso_key' => 'uid',
+    'sso_key' => 'userid',
 
     'secret' => env('JWT_SECRET', 'phper666'), // 非对称加密使用字符串,请使用自己加密的字符串
 

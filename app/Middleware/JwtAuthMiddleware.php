@@ -58,7 +58,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
             //更改上下文，写入用户信息
             //User模型自行创建
             $user = User::query()
-                ->where('account', $jwtData['account'])
+                ->where('phone', $jwtData['phone'])
                 ->first();
             $request = Context::get(ServerRequestInterface::class);
             $request = $request->withAttribute('user', $user);

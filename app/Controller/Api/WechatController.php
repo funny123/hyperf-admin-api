@@ -54,7 +54,7 @@ class WechatController
             'page' => 'pages/detail/detail',       // 点击模板卡片后的跳转页面，仅限本小程序内的页面。支持带参数,（示例index?foo=bar）。该字段不填则模板无跳转。
             'data' => [         // 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }
                 'phrase1' => [
-                    'value' => "老干妈蒸排骨的做法",
+                    'value' => "老干妈蒸排骨",
                 ],
                 'date3' => [
                     'value' => '2021-03-19',
