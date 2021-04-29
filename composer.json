@@ -13,15 +13,17 @@
     "license": "Apache-2.0",
     "require": {
         "php": ">=7.3",
+        "ext-curl": "*",
         "ext-json": "*",
         "ext-mongodb": "*",
         "getuilaboratory/getui-pushapi-php-client-v2": "dev-master",
         "hyperf/amqp": "~2.1.0",
         "hyperf/async-queue": "~2.1.0",
         "hyperf/cache": "~2.1.0",
-        "hyperf/command": "~2.1.0",
+        "hyperf/command": "^2.1",
         "hyperf/config": "~2.1.0",
         "hyperf/constants": "~2.1.0",
+        "hyperf/crontab": "^2.1",
         "hyperf/database": "~2.1.0",
         "hyperf/db-connection": "~2.1.0",
         "hyperf/elasticsearch": "^2.1",
@@ -42,8 +44,7 @@
         "hyperf/tracer": "~2.1.0",
         "overtrue/wechat": "~4.0",
         "phper666/jwt-auth": "^3.0",
-        "reasno/fastmongo": "^0.2.2",
-      "ext-curl": "*"
+        "reasno/fastmongo": "^0.2.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
