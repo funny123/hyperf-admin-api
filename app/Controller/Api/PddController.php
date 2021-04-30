@@ -91,6 +91,7 @@ class PddController extends Controller
             $params['search_id'] = $this->request->input('search_id');
         }
         $params['generate_we_app'] = 'true';
+        $params['generate_authority_url'] = 'true';
         $sign = $this->dataokeFactory->makePddSign($params);
         $params['sign'] = $sign;
         $params['json'] = $params;
