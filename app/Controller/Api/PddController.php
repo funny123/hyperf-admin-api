@@ -201,6 +201,7 @@ class PddController extends Controller
         $params['activity_tags'] = json_encode([10584]);
         $params['opt_id'] = $this->request->input('opt_id', '23010');
         $params['page'] = $this->request->input('page', 1);
+        $params['page_size'] = 20;
         if ($this->request->input('list_id')) {
             $params['list_id'] = $this->request->input('list_id');
         }
