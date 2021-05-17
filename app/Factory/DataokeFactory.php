@@ -63,10 +63,8 @@ class DataokeFactory
         foreach ($params as $k => $v) {
             $str .= $k . $v;
         }
-//        return $str;
         $str = env('PDD_CLIENT_SECRET') . $str . env('PDD_CLIENT_SECRET');
-        $sign = strtoupper(md5($str));
-        return $sign;
+        return strtoupper(md5($str));
     }
 
     function request($params, $type = "GET")
@@ -79,10 +77,11 @@ class DataokeFactory
             return json_encode(array('code' => -10001, 'msg' => "请完善参数"));
         }
         $type = strtoupper($type);
-        if (!in_array($type, array("GET", "POST"))) {
-            return json_encode(array('code' => -10001, 'msg' => "只支持GET/POST请求"));
-        }
+//        if (!in_array($type, array("GET", "POST"))) {
+//            return json_encode(array('code' => -10001, 'msg' => "只支持GET/POST请求"));
+//        }
         //默认必传参数
+//        https://api.weixin.qq.com/sns/jscode2session?appid=wxf419d6d149bcfbe8&secret=029c8d7f52163f22e3b543a79629e6c1&js_code=041Gsn000OcwGL1NXY200lfxek2Gsn0N&grant_type=authorization_code
         $data = [
             'appKey' => $appKey,
             'version' => $version,
@@ -105,5 +104,20 @@ class DataokeFactory
             $res = json_decode($res, true);
             return $res;
         }
+    }
+    /**showapi参数加密
+     * @param $data
+     * @param $appSecret
+     * @return string
+     */
+    function makeShowapiSign($params)
+    {
+        ksort($params);
+        $str = '';
+        foreach ($params as $k => $v) {
+            $str .= $k . $v;
+        }
+        $str .= env('SHOWAPI_SECRET');
+        return md5($str);
     }
 }
