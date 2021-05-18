@@ -291,8 +291,15 @@ class CaiController extends Controller
     {
         $host = "https://caipu.market.alicloudapi.com/showapi_cpQuery";
         $params['maxResults'] = $this->request->input('maxResults', 50);
-        $params['page'] = $this->request->input('page', 3);
         $params['type'] = $this->request->input('type', '家常菜');
+        $params['page'] = $this->request->input('page', 1);
+        if($this->request->input('page')==0){
+            $has = $this->mongoClient->query('xmcaipu.datas', ['type_v3' => $params['type']], [
+                'sort' => ['id' => -1],
+                'limit' => 20,
+            ]);
+            return $this->success($has);
+        }
         $querys = http_build_query($params);
         $headers['headers']['Authorization'] = 'APPCODE ' . env('ALIYUN_APPCODE');
         $url = $host . "?" . $querys;
