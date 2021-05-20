@@ -6,6 +6,7 @@ namespace App\Controller\Api;
 
 use App\Controller\Controller;
 use App\Factory\DataokeFactory;
+use App\Factory\WeChatFactory;
 use App\Model\News;
 use GTClient;
 use GTNotification;
@@ -35,13 +36,15 @@ class CaiController extends Controller
      */
 
     private $dataokeFactory;
+    private $wechatFactory;
     protected $request;
     protected $response;
     protected $mongoClient;
 
-    public function __construct(DataokeFactory $dataokeFactory, RequestInterface $request, ResponseInterface $response)
+    public function __construct(DataokeFactory $dataokeFactory, WeChatFactory $wechatFactory, RequestInterface $request, ResponseInterface $response)
     {
         $this->dataokeFactory = $dataokeFactory;
+        $this->wechatFactory = $wechatFactory;
         $this->request = $request;
         $this->response = $response;
         $this->mongoClient = ApplicationContext::getContainer()->get(MongoTask::class);
@@ -293,7 +296,7 @@ class CaiController extends Controller
         $params['maxResults'] = $this->request->input('maxResults', 50);
         $params['type'] = $this->request->input('type', '家常菜');
         $params['page'] = $this->request->input('page', 1);
-        if($this->request->input('page')==0){
+        if ($this->request->input('page') == 0) {
             $has = $this->mongoClient->query('xmcaipu.datas', ['type_v3' => $params['type']], [
                 'sort' => ['id' => -1],
                 'limit' => 20,
@@ -324,6 +327,9 @@ class CaiController extends Controller
     {
         $res = $this->mongoClient->query('xmcaipu.datas', ['cpName' => $this->request->input('cpName')], []);
         if ($res) {
+            $query = json_decode( json_encode($res),true);
+            $query = urlencode($query[0]['cpName']);
+            $this->submitpages($query);
             return $this->success($res);
         } else {
             return $this->failed('nodata');
@@ -408,5 +414,56 @@ class CaiController extends Controller
             return $this->failed('error');
         }
         return $this->success($result);
+    }
+
+    /**
+     * Note: 微信搜一搜推送接口
+     * User: Marlon
+     * Date: 2021/5/20
+     * Time: 22:47
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return string
+     * @throws \EasyWeChat\Kernel\Exceptions\HttpException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function wxaapi_submitpages(RequestInterface $request, ResponseInterface $response)
+    {
+        $app = $this->wechatFactory->create();
+        $accessToken = $app->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        $url = "https://api.weixin.qq.com/wxa/search/wxaapi_submitpages?access_token=" . $token['access_token'];
+        $data['pages'][0]['path'] = 'pages/detail/detail';
+        $data['pages'][0]['query'] = 'query=%22%E5%AE%9D%E5%AE%9D%E5%A5%B6%E9%85%AA%E6%A3%92%22';
+        $data['pages'][0]['data_list'][0]['@type'] = "wxsearch_testcpdata";
+        $data['pages'][0]['data_list'][0]['update'] = 1;
+        $data['pages'][0]['data_list'][0]['content_id'] = 'test'.time();
+        $data['pages'][0]['data_list'][0]['page_type'] = 2;
+        $data['pages'][0]['data_list'][0]['category_id'] = 12;
+        $data['pages'][0]['data_list'][0]['title'] = '宝宝奶酪棒';
+        $data['pages'][0]['data_list'][0]['abstract'][0] = '自从有了孩子以后，只想把最好的带给宝宝，这里只是我用来记录菜谱的地方，需要的朋友可以参考一下，不感兴趣的朋友也请勿喷！谢谢';
+        $data['pages'][0]['data_list'][0]['mainbody'] = '宝宝奶酪棒';
+        $data['pages'][0]['data_list'][0]['time_publish'] = time();
+        $data['pages'][0]['data_list'][0]['time_modify'] = time();
+        $httpClient = $this->dataokeFactory->http();
+        $params['json'] = $data;
+        $res = $httpClient->post($url,$params);
+        return $res->getBody()->getContents();
+    }
+    public function submitpages($query)
+    {
+        $app = $this->wechatFactory->create();
+        $accessToken = $app->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        $url = "https://api.weixin.qq.com/wxa/search/wxaapi_submitpages?access_token=" . $token['access_token'];
+        $data['pages'][0]['path'] = 'pages/detail/detail';
+        $data['pages'][0]['query'] = 'query='.$query;
+        $httpClient = $this->dataokeFactory->http();
+        $params['json'] = $data;
+        return $httpClient->post($url,$params)->getBody()->getContents();
     }
 }
